@@ -27,6 +27,7 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> with SingleTickerProviderStateMixin {
+  static const double maxSlide = 225.0;
 
   @override
   void initState() {
@@ -35,12 +36,22 @@ class _CustomDrawerState extends State<CustomDrawer> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    var myDrawer = Container(color: Colors.blue,);
-    var myChild = Container(color: Colors.yellow,);
+    var myDrawer = Container(
+      color: Colors.blue,
+    );
+    var myChild = Container(
+      color: Colors.yellow,
+    );
     return Stack(
       children: [
         myDrawer,
-        myChild,
+        Transform(
+          transform: Matrix4.identity()
+            ..translate(maxSlide)
+            ..scale(0.5),
+          alignment: Alignment.centerLeft,
+          child: myChild,
+        ),
       ],
     );
   }
