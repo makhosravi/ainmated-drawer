@@ -15,7 +15,9 @@ class MyApp extends StatelessWidget {
       ),
       title: Text('Custom drawer demo'),
     );
-    Widget child = HomePage(appbar: appbar,);
+    Widget child = HomePage(
+      appbar: appbar,
+    );
     child = CustomDrawer(child: child);
     return MaterialApp(
       title: 'Flutter Demo',
@@ -54,10 +56,10 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text('You have pushed the button this many times:'),
-            Text('$_counter', style: Theme
-                .of(context)
-                .textTheme
-                .headline3,)
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headline3,
+            )
           ],
         ),
       ),
@@ -69,7 +71,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
 
 class CustomDrawer extends StatefulWidget {
   CustomDrawer({Key? key, required this.child}) : super(key: key);
@@ -131,10 +132,7 @@ class _CustomDrawerState extends State<CustomDrawer> with SingleTickerProviderSt
     }
     if (details.velocity.pixelsPerSecond.dx.abs() >= _kMinFlingVelocity) {
       double visualVelocity =
-          details.velocity.pixelsPerSecond.dx / MediaQuery
-              .of(context)
-              .size
-              .width;
+          details.velocity.pixelsPerSecond.dx / MediaQuery.of(context).size.width;
       _animationController!.fling(velocity: visualVelocity);
     } else if (_animationController!.value < 0.5) {
       close();
@@ -164,7 +162,7 @@ class _CustomDrawerState extends State<CustomDrawer> with SingleTickerProviderSt
           final contentScale = 1.0 - (0.3 * animValue);
           return Stack(
             children: [
-              myDrawer,
+              MyDrawer(),
               Transform(
                 transform: Matrix4.identity()
                   ..translate(slideAmount)
@@ -175,6 +173,51 @@ class _CustomDrawerState extends State<CustomDrawer> with SingleTickerProviderSt
             ],
           );
         },
+      ),
+    );
+  }
+}
+
+class MyDrawer extends StatelessWidget {
+  const MyDrawer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.blueAccent,
+      child: SafeArea(
+        child: Theme(
+          data: ThemeData(
+            brightness: Brightness.dark,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              FlutterLogo(size: 200,),
+              ListTile(
+                leading: Icon(Icons.new_releases),
+                title: Text('News'),
+              ),
+              ListTile(
+                leading: Icon(Icons.star),
+                title: Text('Favorites'),
+              ),
+              ListTile(
+                leading: Icon(Icons.map),
+                title: Text('Map'),
+              ),
+              ListTile(
+                leading: Icon(Icons.settings),
+                title: Text('Settings'),
+              ),
+              ListTile(
+                leading: Icon(Icons.person),
+                title: Text('Profile'),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
