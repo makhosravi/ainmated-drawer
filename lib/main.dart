@@ -27,11 +27,23 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> with SingleTickerProviderStateMixin {
+  static const Duration toggleDuration = Duration(milliseconds: 250);
   static const double maxSlide = 225.0;
+  AnimationController? _animationController;
 
   @override
   void initState() {
     super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: toggleDuration,
+    );
+  }
+
+  void toggleDrawer() {
+    _animationController!.isDismissed
+        ? _animationController!.forward()
+        : _animationController!.reverse();
   }
 
   @override
@@ -42,17 +54,28 @@ class _CustomDrawerState extends State<CustomDrawer> with SingleTickerProviderSt
     var myChild = Container(
       color: Colors.yellow,
     );
-    return Stack(
-      children: [
-        myDrawer,
-        Transform(
-          transform: Matrix4.identity()
-            ..translate(maxSlide)
-            ..scale(0.5),
-          alignment: Alignment.centerLeft,
-          child: myChild,
-        ),
-      ],
+    return GestureDetector(
+      onTap: toggleDrawer,
+      child: AnimatedBuilder(
+        animation: _animationController!,
+        builder: (context, child) {
+          double animValue = _animationController!.value;
+          final slideAmount = maxSlide * animValue;
+          final contentScale = 1.0 - (0.3 * animValue);
+          return Stack(
+            children: [
+              myDrawer,
+              Transform(
+                transform: Matrix4.identity()
+                  ..translate(slideAmount)
+                  ..scale(contentScale),
+                alignment: Alignment.centerLeft,
+                child: myChild,
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }
