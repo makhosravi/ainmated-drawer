@@ -46,6 +46,12 @@ class _CustomDrawerState extends State<CustomDrawer> with SingleTickerProviderSt
         : _animationController!.reverse();
   }
 
+  void _onDragStart(DragStartDetails details) {}
+
+  void _onDragUpdate(DragUpdateDetails details) {}
+
+  void _onDragEnd(DragEndDetails details) {}
+
   @override
   Widget build(BuildContext context) {
     var myDrawer = Container(
@@ -55,6 +61,9 @@ class _CustomDrawerState extends State<CustomDrawer> with SingleTickerProviderSt
       color: Colors.yellow,
     );
     return GestureDetector(
+      onHorizontalDragStart: _onDragStart,
+      onHorizontalDragUpdate: _onDragUpdate,
+      onHorizontalDragEnd: _onDragEnd,
       onTap: toggleDrawer,
       child: AnimatedBuilder(
         animation: _animationController!,
