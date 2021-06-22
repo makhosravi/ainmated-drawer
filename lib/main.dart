@@ -7,20 +7,77 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    AppBar appbar = AppBar(
+      leading: Builder(
+        builder: (context) {
+          return IconButton(onPressed: CustomDrawer.of(context)!.open, icon: Icon(Icons.menu));
+        },
+      ),
+      title: Text('Custom drawer demo'),
+    );
+    Widget child = HomePage(appbar: appbar,);
+    child = CustomDrawer(child: child);
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: CustomDrawer(title: 'Flutter Demo Home Page'),
+      home: child,
     );
   }
 }
 
-class CustomDrawer extends StatefulWidget {
-  CustomDrawer({Key? key, required this.title}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key, required this.appbar}) : super(key: key);
 
-  final String title;
+  final AppBar appbar;
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: widget.appbar,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text('You have pushed the button this many times:'),
+            Text('$_counter', style: Theme
+                .of(context)
+                .textTheme
+                .headline3,)
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+
+class CustomDrawer extends StatefulWidget {
+  CustomDrawer({Key? key, required this.child}) : super(key: key);
+
+  final Widget child;
+
+  static _CustomDrawerState? of(BuildContext context) =>
+      context.findAncestorStateOfType<_CustomDrawerState>();
 
   @override
   _CustomDrawerState createState() => _CustomDrawerState();
@@ -74,7 +131,10 @@ class _CustomDrawerState extends State<CustomDrawer> with SingleTickerProviderSt
     }
     if (details.velocity.pixelsPerSecond.dx.abs() >= _kMinFlingVelocity) {
       double visualVelocity =
-          details.velocity.pixelsPerSecond.dx / MediaQuery.of(context).size.width;
+          details.velocity.pixelsPerSecond.dx / MediaQuery
+              .of(context)
+              .size
+              .width;
       _animationController!.fling(velocity: visualVelocity);
     } else if (_animationController!.value < 0.5) {
       close();
@@ -110,7 +170,7 @@ class _CustomDrawerState extends State<CustomDrawer> with SingleTickerProviderSt
                   ..translate(slideAmount)
                   ..scale(contentScale),
                 alignment: Alignment.centerLeft,
-                child: myChild,
+                child: widget.child,
               ),
             ],
           );
