@@ -57,7 +57,12 @@ class _CustomDrawerState extends State<CustomDrawer> with SingleTickerProviderSt
     _canBeDragged = isDragOpenFromLeft || isDragCloseFromWrite;
   }
 
-  void _onDragUpdate(DragUpdateDetails details) {}
+  void _onDragUpdate(DragUpdateDetails details) {
+    if (_canBeDragged) {
+      double delta = details.primaryDelta! / maxSlide;
+      _animationController!.value += delta;
+    }
+  }
 
   void _onDragEnd(DragEndDetails details) {}
 
