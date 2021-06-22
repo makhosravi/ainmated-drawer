@@ -28,8 +28,11 @@ class CustomDrawer extends StatefulWidget {
 
 class _CustomDrawerState extends State<CustomDrawer> with SingleTickerProviderStateMixin {
   static const Duration toggleDuration = Duration(milliseconds: 250);
-  static const double maxSlide = 225.0;
+  static const double maxSlide = 225;
+  static const double minDragStartEdge = 60;
+  static const double maxDragStartEdge = maxSlide - 16;
   AnimationController? _animationController;
+  bool _canBeDragged = false;
 
   @override
   void initState() {
@@ -46,7 +49,13 @@ class _CustomDrawerState extends State<CustomDrawer> with SingleTickerProviderSt
         : _animationController!.reverse();
   }
 
-  void _onDragStart(DragStartDetails details) {}
+  void _onDragStart(DragStartDetails details) {
+    bool isDragOpenFromLeft =
+        _animationController!.isDismissed && details.globalPosition.dx < minDragStartEdge;
+    bool isDragCloseFromWrite =
+        _animationController!.isCompleted && details.globalPosition.dx > maxDragStartEdge;
+    _canBeDragged = isDragOpenFromLeft || isDragCloseFromWrite;
+  }
 
   void _onDragUpdate(DragUpdateDetails details) {}
 
