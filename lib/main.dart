@@ -43,10 +43,12 @@ class _CustomDrawerState extends State<CustomDrawer> with SingleTickerProviderSt
     );
   }
 
+  void close() => _animationController!.reverse();
+
+  void open() => _animationController!.forward();
+
   void toggleDrawer() {
-    _animationController!.isDismissed
-        ? _animationController!.forward()
-        : _animationController!.reverse();
+    _animationController!.isCompleted ? close() : open();
   }
 
   void _onDragStart(DragStartDetails details) {
@@ -64,7 +66,22 @@ class _CustomDrawerState extends State<CustomDrawer> with SingleTickerProviderSt
     }
   }
 
-  void _onDragEnd(DragEndDetails details) {}
+  void _onDragEnd(DragEndDetails details) {
+    double _kMinFlingVelocity = 365.0;
+
+    if (_animationController!.isDismissed || _animationController!.isCompleted) {
+      return;
+    }
+    if (details.velocity.pixelsPerSecond.dx.abs() >= _kMinFlingVelocity) {
+      double visualVelocity =
+          details.velocity.pixelsPerSecond.dx / MediaQuery.of(context).size.width;
+      _animationController!.fling(velocity: visualVelocity);
+    } else if (_animationController!.value < 0.5) {
+      close();
+    } else {
+      open();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
