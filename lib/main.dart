@@ -35,6 +35,13 @@ class _CustomDrawerState extends State<CustomDrawer> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    return Container(color: Colors.white,);
+    var myDrawer = Container(color: Colors.blue,);
+    var myChild = Container(color: Colors.yellow,);
+    return Stack(
+      children: [
+        myDrawer,
+        myChild,
+      ],
+    );
   }
 }
