@@ -101,6 +101,12 @@ class _CustomDrawerState extends State<CustomDrawer> with SingleTickerProviderSt
     );
   }
 
+  @override
+  void dispose() {
+    _animationController!.dispose();
+    super.dispose();
+  }
+
   void close() => _animationController!.reverse();
 
   void open() => _animationController!.forward();
@@ -143,36 +149,41 @@ class _CustomDrawerState extends State<CustomDrawer> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    var myDrawer = Container(
-      color: Colors.blue,
-    );
-    var myChild = Container(
-      color: Colors.yellow,
-    );
-    return GestureDetector(
-      onHorizontalDragStart: _onDragStart,
-      onHorizontalDragUpdate: _onDragUpdate,
-      onHorizontalDragEnd: _onDragEnd,
-      onTap: toggleDrawer,
-      child: AnimatedBuilder(
-        animation: _animationController!,
-        builder: (context, child) {
-          double animValue = _animationController!.value;
-          final slideAmount = maxSlide * animValue;
-          final contentScale = 1.0 - (0.3 * animValue);
-          return Stack(
-            children: [
-              MyDrawer(),
-              Transform(
-                transform: Matrix4.identity()
-                  ..translate(slideAmount)
-                  ..scale(contentScale),
-                alignment: Alignment.centerLeft,
-                child: widget.child,
-              ),
-            ],
-          );
-        },
+    return WillPopScope(
+      onWillPop: () async {
+        if (_animationController!.isCompleted) {
+          close();
+          return false;
+        }
+        return true;
+      },
+      child: GestureDetector(
+        onHorizontalDragStart: _onDragStart,
+        onHorizontalDragUpdate: _onDragUpdate,
+        onHorizontalDragEnd: _onDragEnd,
+        child: AnimatedBuilder(
+          animation: _animationController!,
+          child: widget.child,
+          builder: (context, child) {
+            double animValue = _animationController!.value;
+            final slideAmount = maxSlide * animValue;
+            final contentScale = 1.0 - (0.3 * animValue);
+            return Stack(
+              children: [
+                MyDrawer(),
+                Transform(
+                  transform: Matrix4.identity()
+                    ..translate(slideAmount)
+                    ..scale(contentScale),
+                  alignment: Alignment.centerLeft,
+                  child: GestureDetector(
+                      onTap: () => _animationController!.isCompleted ? close() : null,
+                      child: widget.child),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -194,7 +205,9 @@ class MyDrawer extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: [
-              FlutterLogo(size: 200,),
+              FlutterLogo(
+                size: 200,
+              ),
               ListTile(
                 leading: Icon(Icons.new_releases),
                 title: Text('News'),
