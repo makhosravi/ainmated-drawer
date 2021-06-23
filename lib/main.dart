@@ -205,8 +205,13 @@ class MyDrawer extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: [
-              FlutterLogo(
-                size: 200,
+              UserAccountsDrawerHeader(
+                accountName: Text('MAKH'),
+                accountEmail: Text('makh@sth.com'),
+                currentAccountPicture: FlutterLogo(),
+                decoration: BoxDecoration(
+                  color: Colors.blueAccent,
+                ),
               ),
               ListTile(
                 leading: Icon(Icons.new_releases),
