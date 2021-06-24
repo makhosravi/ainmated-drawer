@@ -1,4 +1,3 @@
-import 'package:complex_ui1/drawer.dart';
 import 'package:flutter/material.dart';
 
 class CustomDrawer extends StatefulWidget {
@@ -44,14 +43,16 @@ class _CustomDrawerState extends State<CustomDrawer> with SingleTickerProviderSt
     _animationController!.isCompleted ? close() : open();
   }
 
+  // decide drag is going to open or close drawer
   void _onDragStart(DragStartDetails details) {
     bool isDragOpenFromLeft =
         _animationController!.isDismissed && details.globalPosition.dx < minDragStartEdge;
-    bool isDragCloseFromWrite =
+    bool isDragCloseFromRite =
         _animationController!.isCompleted && details.globalPosition.dx > maxDragStartEdge;
-    _canBeDragged = isDragOpenFromLeft || isDragCloseFromWrite;
+    _canBeDragged = isDragOpenFromLeft || isDragCloseFromRite;
   }
 
+  // detects how long the pointer has moved
   void _onDragUpdate(DragUpdateDetails details) {
     if (_canBeDragged) {
       double delta = details.primaryDelta! / maxSlide;
@@ -112,6 +113,58 @@ class _CustomDrawerState extends State<CustomDrawer> with SingleTickerProviderSt
               ],
             );
           },
+        ),
+      ),
+    );
+  }
+}
+
+class MyDrawer extends StatelessWidget {
+  const MyDrawer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.blueAccent,
+      child: SafeArea(
+        child: Theme(
+          data: ThemeData(
+            brightness: Brightness.dark,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              UserAccountsDrawerHeader(
+                accountName: Text('MAKH'),
+                accountEmail: Text('makh@sth.com'),
+                currentAccountPicture: FlutterLogo(),
+                decoration: BoxDecoration(
+                  color: Colors.blueAccent,
+                ),
+              ),
+              ListTile(
+                leading: Icon(Icons.new_releases),
+                title: Text('News'),
+              ),
+              ListTile(
+                leading: Icon(Icons.star),
+                title: Text('Favorites'),
+              ),
+              ListTile(
+                leading: Icon(Icons.map),
+                title: Text('Map'),
+              ),
+              ListTile(
+                leading: Icon(Icons.settings),
+                title: Text('Settings'),
+              ),
+              ListTile(
+                leading: Icon(Icons.person),
+                title: Text('Profile'),
+              ),
+            ],
+          ),
         ),
       ),
     );
