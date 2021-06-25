@@ -1,22 +1,30 @@
 import 'package:complex_ui1/custom_drawer.dart';
+import 'package:complex_ui1/drawe_state.dart';
 import 'package:complex_ui1/home.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider<DrawerState>(
+      create: (context) => DrawerState(),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    bool flip = true;
+    bool flip = Provider.of<DrawerState>(context, listen: true).flip;
     AppBar appbar = AppBar(
       leading: Builder(
         builder: (context) {
           return IconButton(
-              onPressed:
-                  flip ? CustomGuitarDrawer.of(context)!.open : CustomDrawer.of(context)!.open,
+              onPressed: flip
+                  ? CustomGuitarDrawer.of(context)!.open
+                  : CustomDrawer.of(context)!.open,
               icon: Icon(Icons.menu));
         },
       ),
