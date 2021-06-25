@@ -44,10 +44,10 @@ class _CustomGuitarDrawerState extends State<CustomGuitarDrawer>
   void toggleDrawer() => _animationController!.isCompleted ? close() : open();
 
   void _onDragStart(DragStartDetails details) {
-    bool isDragOpenFromLeft =
-        _animationController!.isDismissed && details.globalPosition.dx < minDragStartEdge;
-    bool isDragCloseFromRight =
-        _animationController!.isCompleted && details.globalPosition.dx > maxDragStartEdge;
+    bool isDragOpenFromLeft = _animationController!.isDismissed &&
+        details.globalPosition.dx < minDragStartEdge;
+    bool isDragCloseFromRight = _animationController!.isCompleted &&
+        details.globalPosition.dx > maxDragStartEdge;
     _canBeDragged = isDragOpenFromLeft || isDragCloseFromRight;
   }
 
@@ -60,12 +60,13 @@ class _CustomGuitarDrawerState extends State<CustomGuitarDrawer>
 
   void _onDragEnd(DragEndDetails details) {
     double _kMinFlingVelocity = 365.0;
-    if (_animationController!.isDismissed || _animationController!.isCompleted) {
+    if (_animationController!.isDismissed ||
+        _animationController!.isCompleted) {
       return;
     }
     if (details.velocity.pixelsPerSecond.dx.abs() >= _kMinFlingVelocity) {
-      double visualVelocity =
-          details.velocity.pixelsPerSecond.dx / MediaQuery.of(context).size.width;
+      double visualVelocity = details.velocity.pixelsPerSecond.dx /
+          MediaQuery.of(context).size.width;
       _animationController!.fling(velocity: visualVelocity);
     } else if (_animationController!.value < 0.5) {
       close();
@@ -98,11 +99,13 @@ class _CustomGuitarDrawerState extends State<CustomGuitarDrawer>
               child: Stack(
                 children: <Widget>[
                   Transform.translate(
-                    offset: Offset(maxSlide * (_animationController!.value - 1), 0),
+                    offset:
+                        Offset(maxSlide * (_animationController!.value - 1), 0),
                     child: Transform(
                       transform: Matrix4.identity()
                         ..setEntry(3, 2, 0.001)
-                        ..rotateY(math.pi / 2 * (1 - _animationController!.value)),
+                        ..rotateY(
+                            math.pi / 2 * (1 - _animationController!.value)),
                       alignment: Alignment.centerRight,
                       child: MyDrawer(),
                     ),

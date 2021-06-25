@@ -52,10 +52,12 @@ class _HomePageState extends State<HomePage> {
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
                             !flip.flip ? Colors.white : Colors.blueAccent),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18),
-                            side: BorderSide(width: 2, color: Colors.blueAccent),
+                            side:
+                                BorderSide(width: 2, color: Colors.blueAccent),
                           ),
                         ),
                       ),
@@ -73,12 +75,15 @@ class _HomePageState extends State<HomePage> {
                       },
                       child: Text(
                         'Guitar',
-                        style: TextStyle(color: flip.flip ? Colors.blueAccent : Colors.white),
+                        style: TextStyle(
+                            color:
+                                flip.flip ? Colors.blueAccent : Colors.white),
                       ),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
                             flip.flip ? Colors.white : Colors.blueAccent),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18),
                             side: BorderSide(

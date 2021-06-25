@@ -12,7 +12,8 @@ class CustomDrawer extends StatefulWidget {
   _CustomDrawerState createState() => _CustomDrawerState();
 }
 
-class _CustomDrawerState extends State<CustomDrawer> with SingleTickerProviderStateMixin {
+class _CustomDrawerState extends State<CustomDrawer>
+    with SingleTickerProviderStateMixin {
   static const Duration toggleDuration = Duration(milliseconds: 250);
   static const double maxSlide = 225;
   static const double minDragStartEdge = 60;
@@ -45,10 +46,10 @@ class _CustomDrawerState extends State<CustomDrawer> with SingleTickerProviderSt
 
   // decide drag is going to open or close drawer
   void _onDragStart(DragStartDetails details) {
-    bool isDragOpenFromLeft =
-        _animationController!.isDismissed && details.globalPosition.dx < minDragStartEdge;
-    bool isDragCloseFromRite =
-        _animationController!.isCompleted && details.globalPosition.dx > maxDragStartEdge;
+    bool isDragOpenFromLeft = _animationController!.isDismissed &&
+        details.globalPosition.dx < minDragStartEdge;
+    bool isDragCloseFromRite = _animationController!.isCompleted &&
+        details.globalPosition.dx > maxDragStartEdge;
     _canBeDragged = isDragOpenFromLeft || isDragCloseFromRite;
   }
 
@@ -63,12 +64,13 @@ class _CustomDrawerState extends State<CustomDrawer> with SingleTickerProviderSt
   void _onDragEnd(DragEndDetails details) {
     double _kMinFlingVelocity = 365.0;
 
-    if (_animationController!.isDismissed || _animationController!.isCompleted) {
+    if (_animationController!.isDismissed ||
+        _animationController!.isCompleted) {
       return;
     }
     if (details.velocity.pixelsPerSecond.dx.abs() >= _kMinFlingVelocity) {
-      double visualVelocity =
-          details.velocity.pixelsPerSecond.dx / MediaQuery.of(context).size.width;
+      double visualVelocity = details.velocity.pixelsPerSecond.dx /
+          MediaQuery.of(context).size.width;
       _animationController!.fling(velocity: visualVelocity);
     } else if (_animationController!.value < 0.5) {
       close();
@@ -107,7 +109,8 @@ class _CustomDrawerState extends State<CustomDrawer> with SingleTickerProviderSt
                     ..scale(contentScale),
                   alignment: Alignment.centerLeft,
                   child: GestureDetector(
-                      onTap: () => _animationController!.isCompleted ? close() : null,
+                      onTap: () =>
+                          _animationController!.isCompleted ? close() : null,
                       child: widget.child),
                 ),
               ],

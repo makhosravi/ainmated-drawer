@@ -33,7 +33,8 @@ class MyApp extends StatelessWidget {
     Widget child = HomePage(
       appbar: appbar,
     );
-    child = flip ? CustomGuitarDrawer(child: child) : CustomDrawer(child: child);
+    child =
+        flip ? CustomGuitarDrawer(child: child) : CustomDrawer(child: child);
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -43,5 +44,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
