@@ -93,7 +93,6 @@ class _CustomGuitarDrawerState extends State<CustomGuitarDrawer>
           child: widget.child,
           animation: _animationController!,
           builder: (context, child) {
-            final contentScale = 1.0 - (0.3 * _animationController!.value);
             return Material(
               color: Colors.blueGrey,
               child: Stack(
