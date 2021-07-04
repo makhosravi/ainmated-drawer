@@ -1,5 +1,6 @@
 import 'package:complex_ui1/custom_drawer.dart';
 import 'package:complex_ui1/custom_guitar_drawer.dart';
+import 'package:complex_ui1/notifier/counter_state.dart';
 import 'package:complex_ui1/notifier/drawer_state.dart';
 import 'package:complex_ui1/home.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +8,15 @@ import 'package:provider/provider.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider<DrawerState>(
-      create: (context) => DrawerState(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => DrawerState(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => CounterState(),
+        ),
+      ],
       child: MyApp(),
     ),
   );

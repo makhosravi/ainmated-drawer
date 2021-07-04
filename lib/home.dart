@@ -1,3 +1,4 @@
+import 'package:complex_ui1/notifier/counter_state.dart';
 import 'package:complex_ui1/notifier/drawer_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,16 +13,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    final _counter = context.watch<CounterState>();
     return Scaffold(
       appBar: widget.appbar,
       body: Center(
@@ -30,7 +24,7 @@ class _HomePageState extends State<HomePage> {
           children: <Widget>[
             Text('You have pushed the button this many times:'),
             Text(
-              '$_counter',
+              '${_counter.counter}',
               style: Theme.of(context).textTheme.headline3,
             ),
             Row(
@@ -102,7 +96,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () => _counter.counter = _counter.counter + 1,
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ),
