@@ -1,8 +1,8 @@
-import 'package:complex_ui1/widget/custom_drawer.dart';
-import 'package:complex_ui1/widget/custom_guitar_drawer.dart';
-import 'package:complex_ui1/notifier/counter_state.dart';
-import 'package:complex_ui1/notifier/drawer_state.dart';
-import 'package:complex_ui1/home.dart';
+import 'package:complex_ui1/widgets/custom_drawer.dart';
+import 'package:complex_ui1/widgets/custom_guitar_drawer.dart';
+import 'package:complex_ui1/notifiers/counter_state.dart';
+import 'package:complex_ui1/notifiers/drawer_state.dart';
+import 'package:complex_ui1/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

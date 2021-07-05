@@ -1,5 +1,5 @@
-import 'package:complex_ui1/notifier/counter_state.dart';
-import 'package:complex_ui1/notifier/drawer_state.dart';
+import 'package:complex_ui1/notifiers/counter_state.dart';
+import 'package:complex_ui1/notifiers/drawer_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
