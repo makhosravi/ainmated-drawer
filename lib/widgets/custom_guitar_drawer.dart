@@ -1,3 +1,4 @@
+import 'package:complex_ui1/widgets/my_drawer.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -107,7 +108,7 @@ class _CustomGuitarDrawerState extends State<CustomGuitarDrawer>
                         ..rotateY(
                             math.pi / 2 * (1 - _animationController!.value)),
                       alignment: Alignment.centerRight,
-                      child: MyDrawer(),
+                      child: MyDrawer(width: 300,),
                     ),
                   ),
                   Transform.translate(
@@ -124,62 +125,6 @@ class _CustomGuitarDrawerState extends State<CustomGuitarDrawer>
               ),
             );
           },
-        ),
-      ),
-    );
-  }
-}
-
-class MyDrawer extends StatelessWidget {
-  const MyDrawer({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 300,
-      height: double.infinity,
-      child: Material(
-        color: Colors.blueAccent,
-        child: SafeArea(
-          child: Theme(
-            data: ThemeData(
-              brightness: Brightness.dark,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                UserAccountsDrawerHeader(
-                  accountName: Text('MAKH'),
-                  accountEmail: Text('makh@sth.com'),
-                  currentAccountPicture: FlutterLogo(),
-                  decoration: BoxDecoration(
-                    color: Colors.blueAccent,
-                  ),
-                ),
-                ListTile(
-                  leading: Icon(Icons.new_releases),
-                  title: Text('News'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.star),
-                  title: Text('Favorites'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.map),
-                  title: Text('Map'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.settings),
-                  title: Text('Settings'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.person),
-                  title: Text('Profile'),
-                ),
-              ],
-            ),
-          ),
         ),
       ),
     );
