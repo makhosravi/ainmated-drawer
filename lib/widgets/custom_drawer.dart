@@ -1,3 +1,4 @@
+import 'package:complex_ui1/controller/drag_controller.dart';
 import 'package:complex_ui1/widgets/my_drawer.dart';
 import 'package:flutter/material.dart';
 
@@ -16,11 +17,13 @@ class CustomDrawer extends StatefulWidget {
 class _CustomDrawerState extends State<CustomDrawer>
     with SingleTickerProviderStateMixin {
   static const Duration toggleDuration = Duration(milliseconds: 250);
-  static const double maxSlide = 225;
-  static const double minDragStartEdge = 60;
-  static const double maxDragStartEdge = maxSlide - 16;
   AnimationController? _animationController;
-  bool _canBeDragged = false;
+  DragController? _dragController;
+  static const double maxSlide = 225;
+
+  // static const double minDragStartEdge = 60;
+  // static const double maxDragStartEdge = maxSlide - 16;
+  // bool _canBeDragged = false;
 
   @override
   void initState() {
@@ -28,6 +31,11 @@ class _CustomDrawerState extends State<CustomDrawer>
     _animationController = AnimationController(
       vsync: this,
       duration: toggleDuration,
+    );
+    _dragController = DragController(
+      context: context,
+      animationController: _animationController!,
+      maxSlide: maxSlide,
     );
   }
 
@@ -45,40 +53,40 @@ class _CustomDrawerState extends State<CustomDrawer>
     _animationController!.isCompleted ? close() : open();
   }
 
-  // decide drag is going to open or close drawer
-  void _onDragStart(DragStartDetails details) {
-    bool isDragOpenFromLeft = _animationController!.isDismissed &&
-        details.globalPosition.dx < minDragStartEdge;
-    bool isDragCloseFromRite = _animationController!.isCompleted &&
-        details.globalPosition.dx > maxDragStartEdge;
-    _canBeDragged = isDragOpenFromLeft || isDragCloseFromRite;
-  }
-
-  // detects how long the pointer has moved
-  void _onDragUpdate(DragUpdateDetails details) {
-    if (_canBeDragged) {
-      double delta = details.primaryDelta! / maxSlide;
-      _animationController!.value += delta;
-    }
-  }
-
-  void _onDragEnd(DragEndDetails details) {
-    double _kMinFlingVelocity = 365.0;
-
-    if (_animationController!.isDismissed ||
-        _animationController!.isCompleted) {
-      return;
-    }
-    if (details.velocity.pixelsPerSecond.dx.abs() >= _kMinFlingVelocity) {
-      double visualVelocity = details.velocity.pixelsPerSecond.dx /
-          MediaQuery.of(context).size.width;
-      _animationController!.fling(velocity: visualVelocity);
-    } else if (_animationController!.value < 0.5) {
-      close();
-    } else {
-      open();
-    }
-  }
+  // // decide drag is going to open or close drawer
+  // void _onDragStart(DragStartDetails details) {
+  //   bool isDragOpenFromLeft = _animationController!.isDismissed &&
+  //       details.globalPosition.dx < minDragStartEdge;
+  //   bool isDragCloseFromRite = _animationController!.isCompleted &&
+  //       details.globalPosition.dx > maxDragStartEdge;
+  //   _canBeDragged = isDragOpenFromLeft || isDragCloseFromRite;
+  // }
+  //
+  // // detects how long the pointer has moved
+  // void _onDragUpdate(DragUpdateDetails details) {
+  //   if (_canBeDragged) {
+  //     double delta = details.primaryDelta! / maxSlide;
+  //     _animationController!.value += delta;
+  //   }
+  // }
+  //
+  // void _onDragEnd(DragEndDetails details) {
+  //   double _kMinFlingVelocity = 365.0;
+  //
+  //   if (_animationController!.isDismissed ||
+  //       _animationController!.isCompleted) {
+  //     return;
+  //   }
+  //   if (details.velocity.pixelsPerSecond.dx.abs() >= _kMinFlingVelocity) {
+  //     double visualVelocity = details.velocity.pixelsPerSecond.dx /
+  //         MediaQuery.of(context).size.width;
+  //     _animationController!.fling(velocity: visualVelocity);
+  //   } else if (_animationController!.value < 0.5) {
+  //     close();
+  //   } else {
+  //     open();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -91,9 +99,9 @@ class _CustomDrawerState extends State<CustomDrawer>
         return true;
       },
       child: GestureDetector(
-        onHorizontalDragStart: _onDragStart,
-        onHorizontalDragUpdate: _onDragUpdate,
-        onHorizontalDragEnd: _onDragEnd,
+        onHorizontalDragStart: _dragController!.onDragStart,
+        onHorizontalDragUpdate: _dragController!.onDragUpdate,
+        onHorizontalDragEnd: _dragController!.onDragEnd,
         child: AnimatedBuilder(
           animation: _animationController!,
           child: widget.child,

@@ -1,3 +1,4 @@
+import 'package:complex_ui1/controller/drag_controller.dart';
 import 'package:complex_ui1/widgets/my_drawer.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
@@ -16,12 +17,10 @@ class CustomGuitarDrawer extends StatefulWidget {
 
 class _CustomGuitarDrawerState extends State<CustomGuitarDrawer>
     with SingleTickerProviderStateMixin {
-  static const double maxSlide = 300;
   static const Duration toggleDuration = Duration(milliseconds: 250);
-  static const double minDragStartEdge = 60;
-  static const double maxDragStartEdge = maxSlide - 16;
   AnimationController? _animationController;
-  bool _canBeDragged = false;
+  DragController? _dragController;
+  static const double maxSlide = 300;
 
   @override
   void initState() {
@@ -29,6 +28,11 @@ class _CustomGuitarDrawerState extends State<CustomGuitarDrawer>
     _animationController = AnimationController(
       vsync: this,
       duration: toggleDuration,
+    );
+    _dragController = DragController(
+      context: context,
+      animationController: _animationController!,
+      maxSlide: maxSlide,
     );
   }
 
@@ -44,38 +48,6 @@ class _CustomGuitarDrawerState extends State<CustomGuitarDrawer>
 
   void toggleDrawer() => _animationController!.isCompleted ? close() : open();
 
-  void _onDragStart(DragStartDetails details) {
-    bool isDragOpenFromLeft = _animationController!.isDismissed &&
-        details.globalPosition.dx < minDragStartEdge;
-    bool isDragCloseFromRight = _animationController!.isCompleted &&
-        details.globalPosition.dx > maxDragStartEdge;
-    _canBeDragged = isDragOpenFromLeft || isDragCloseFromRight;
-  }
-
-  void _onDragUpdate(DragUpdateDetails details) {
-    if (_canBeDragged) {
-      double delta = details.primaryDelta! / maxSlide;
-      _animationController!.value += delta;
-    }
-  }
-
-  void _onDragEnd(DragEndDetails details) {
-    double _kMinFlingVelocity = 365.0;
-    if (_animationController!.isDismissed ||
-        _animationController!.isCompleted) {
-      return;
-    }
-    if (details.velocity.pixelsPerSecond.dx.abs() >= _kMinFlingVelocity) {
-      double visualVelocity = details.velocity.pixelsPerSecond.dx /
-          MediaQuery.of(context).size.width;
-      _animationController!.fling(velocity: visualVelocity);
-    } else if (_animationController!.value < 0.5) {
-      close();
-    } else {
-      open();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -87,9 +59,9 @@ class _CustomGuitarDrawerState extends State<CustomGuitarDrawer>
         return true;
       },
       child: GestureDetector(
-        onHorizontalDragStart: _onDragStart,
-        onHorizontalDragUpdate: _onDragUpdate,
-        onHorizontalDragEnd: _onDragEnd,
+        onHorizontalDragStart: _dragController!.onDragStart,
+        onHorizontalDragUpdate: _dragController!.onDragUpdate,
+        onHorizontalDragEnd: _dragController!.onDragEnd,
         behavior: HitTestBehavior.translucent,
         child: AnimatedBuilder(
           child: widget.child,
@@ -108,7 +80,9 @@ class _CustomGuitarDrawerState extends State<CustomGuitarDrawer>
                         ..rotateY(
                             math.pi / 2 * (1 - _animationController!.value)),
                       alignment: Alignment.centerRight,
-                      child: MyDrawer(width: 300,),
+                      child: MyDrawer(
+                        width: 300,
+                      ),
                     ),
                   ),
                   Transform.translate(
